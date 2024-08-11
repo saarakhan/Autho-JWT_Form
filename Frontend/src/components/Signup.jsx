@@ -1,0 +1,67 @@
+import axios from 'axios';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Password from './Password';
+
+function Signup() {
+  const [name, setName] = useState();
+  const [password, setPassword] = useState();
+  const navigate = useNavigate();
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    axios
+      .post('http://localhost:3000/signup', { name, password })
+      .then(result => {
+        console.log(result);
+        alert('Signed in succesfully!!');
+        navigate('/login');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  return (
+    <div className='flex justify-center items-center bg-gray-700 min-h-screen'>
+      <div className='bg-white p-6 rounded-lg w-1/4'>
+        <h2 className='text-center text-2xl font-semibold mb-4'>Sign Up</h2>
+
+        <form onSubmit={handleSubmit}>
+          <div className='mb-4'>
+            <label
+              htmlFor='email'
+              className='block text-gray-700 font-bold mb-2'>
+              Name
+            </label>
+            <input
+              type='text'
+              placeholder='Enter Name'
+              autoComplete='off'
+              name='email'
+              className='form-input mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500'
+              onChange={e => setName(e.target.value)}
+            />
+          </div>
+
+          <div className='mb-4'>
+            <Password setPassword={setPassword} />
+          </div>
+          <button
+            type='submit'
+            className='w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'>
+            Sign Up
+          </button>
+        </form>
+        <p className='text-center mt-4'>Already have an account?</p>
+        <Link
+          to='/login'
+          className='block w-full text-center mt-2 py-2 px-4 border border-gray-300 bg-gray-100 rounded-md text-gray-700 hover:bg-gray-200'>
+          Login
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export default Signup;
